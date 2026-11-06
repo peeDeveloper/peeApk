@@ -1,0 +1,1061 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>peeApk — HTML para APK</title>
+<style>
+:root{--bg:#ececec;--card:#fff;--ink:#111;--muted:#6b6b6b;--line:#dedede;--soft:#f5f5f5;--r:16px}
+*{box-sizing:border-box;margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45;padding-bottom:100px;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+.top{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.bar{display:flex;align-items:center;gap:12px;height:60px}
+.logo{width:36px;height:36px;border-radius:10px;background:#111;color:#fff;display:grid;place-items:center;font-weight:800;font-size:18px}
+.brand b{display:block;font-size:17px;letter-spacing:-.2px}
+.brand small{color:var(--muted);font-size:12px}
+.by{margin-left:auto;font-size:12px;color:var(--muted);background:var(--soft);border:1px solid var(--line);padding:5px 10px;border-radius:99px}
+.hero{padding:28px 0 6px}
+.hero h1{font-size:26px;line-height:1.15;letter-spacing:-.5px}
+.hero p{color:var(--muted);margin-top:8px}
+.note{margin:16px 0 4px;padding:13px 15px;border-radius:12px;background:#111;color:#dcdcdc;font-size:13.5px}
+.note b{color:#fff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin:14px 0}
+.card h2{font-size:16px;display:flex;align-items:center;gap:10px;margin-bottom:2px}
+.card h2 i{font-style:normal;width:24px;height:24px;border-radius:8px;background:#111;color:#fff;font-size:12px;display:grid;place-items:center}
+.sub{color:var(--muted);font-size:13px;margin:2px 0 14px 34px}
+.drop{display:block;border:1.5px dashed #b9b9b9;border-radius:14px;padding:22px 14px;text-align:center;background:var(--soft);cursor:pointer;transition:.15s}
+.drop:hover,.drop.over{border-color:#111;background:#efefef}
+.drop b{display:block}.drop small{color:var(--muted)}
+.chip{display:flex;align-items:center;gap:10px;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:10px;font-size:14px}
+.chip span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip em{font-style:normal;color:var(--muted);font-size:12px}
+.chip button{border:0;background:none;font-size:18px;line-height:1;cursor:pointer;color:var(--muted);padding:2px 6px}
+.btn{font:inherit;border:1px solid var(--line);background:#fff;color:var(--ink);padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:600;font-size:14px}
+.btn:hover{background:var(--soft)}
+.btn.primary{background:#111;color:#fff;border-color:#111}
+.btn.primary:hover{background:#2a2a2a}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid .full{grid-column:1/-1}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+label.f{display:block;font-size:13px;font-weight:600}
+label.f small{display:block;font-weight:400;color:var(--muted);margin-top:2px}
+input[type=text],input[type=number],select{width:100%;margin-top:6px;font:inherit;font-size:15px;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+input:focus,select:focus{outline:2px solid #111;outline-offset:-1px}
+input[type=color]{width:100%;height:44px;margin-top:6px;border:1px solid var(--line);border-radius:12px;padding:4px;background:#fff}
+.icon-box{display:flex;align-items:center;gap:12px;margin-top:6px}
+.icon-prev{width:56px;height:56px;border-radius:14px;background:var(--soft);border:1px solid var(--line);display:grid;place-items:center;overflow:hidden;font-weight:800;color:#999}
+.icon-prev img{width:100%;height:100%;object-fit:cover}
+.seg{display:flex;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px;margin-top:6px}
+.seg label{flex:1;position:relative}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg span{display:block;text-align:center;padding:9px 6px;border-radius:9px;font-size:13.5px;cursor:pointer;color:var(--muted);font-weight:600}
+.seg input:checked+span{background:#111;color:#fff}
+.hint{font-size:12.5px;color:var(--muted);margin-top:6px}
+.list{display:flex;flex-direction:column}
+.row{display:flex;align-items:center;gap:14px;padding:12px 0;border-top:1px solid var(--line);cursor:pointer}
+.row:first-child{border-top:0}
+.row span{flex:1}.row b{display:block;font-size:14.5px}
+.row small{display:block;color:var(--muted);font-size:12.5px;margin-top:1px}
+.sw{appearance:none;-webkit-appearance:none;width:46px;height:27px;border-radius:99px;background:#cfcfcf;position:relative;flex:none;cursor:pointer;transition:.15s}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:#fff;transition:.15s;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+.sw:checked{background:#111}.sw:checked::after{left:22px}
+.sw:disabled{opacity:.45;cursor:not-allowed}
+.dock{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-top:1px solid var(--line);padding:12px 0;z-index:6}
+.dock .btn{width:100%;padding:15px;font-size:16px;border-radius:14px}
+#result{display:none;border-color:#111}
+#result ol{margin:10px 0 0 20px;font-size:14px}#result li{margin:6px 0}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:20;padding:16px}
+.modal.on{display:flex}
+.phone{background:#111;border-radius:30px;padding:12px;width:min(100%,380px)}
+.phone iframe{width:100%;height:min(70vh,640px);border:0;border-radius:20px;background:#fff;display:block}
+.phone .btn{margin-top:10px;width:100%;background:#fff}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#111;color:#fff;padding:11px 16px;border-radius:12px;font-size:14px;display:none;z-index:30;max-width:90%;text-align:center}
+footer{text-align:center;color:var(--muted);font-size:12.5px;padding:18px 0}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap bar">
+  <div class="logo">P</div>
+  <div class="brand"><b>peeApk</b><small>HTML → APK</small></div>
+  <span class="by">por Lipee</span>
+</div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>Transforme seu HTML em um app Android</h1>
+    <p>Envie o arquivo, escolha as opções e gere seu aplicativo.</p>
+  </section>
+  <div class="note"><b>Como funciona:</b> o navegador não consegue compilar Android sozinho. O peeApk monta o projeto completo do seu app (com o seu HTML dentro) e já inclui um build automático no GitHub, grátis, que entrega o <b>.apk</b> pronto em poucos minutos.</div>
+
+  <section class="card">
+    <h2><i>1</i>Arquivo HTML</h2>
+    <p class="sub">O site que vai virar app.</p>
+    <label class="drop" id="drop">
+      <input type="file" id="htmlFile" accept=".html,.htm,text/html" hidden>
+      <b>Toque para escolher o arquivo HTML</b><small>ou arraste e solte aqui</small>
+    </label>
+    <div id="htmlChip"></div>
+    <div class="actions">
+      <label class="btn" style="cursor:pointer">Adicionar arquivos extras (CSS, JS, imagens)<input type="file" id="extraFile" multiple hidden></label>
+      <button class="btn" id="prev" disabled>Pré-visualizar</button>
+    </div>
+    <div id="extraList"></div>
+  </section>
+
+  <section class="card">
+    <h2><i>2</i>Informações do app</h2>
+    <p class="sub">Identidade do aplicativo.</p>
+    <div class="grid">
+      <label class="f">Nome do app<input type="text" id="name" placeholder="Meu App" maxlength="40"></label>
+      <label class="f">Versão<input type="text" id="vname" value="1.0.0" maxlength="20"></label>
+      <label class="f full">Pacote<small>Identificador único. Só letras minúsculas, números e pontos.</small><input type="text" id="pkg" placeholder="com.lipee.meuapp" autocapitalize="none" autocomplete="off" spellcheck="false"></label>
+      <label class="f">Código da versão<small>Número inteiro; aumente a cada atualização.</small><input type="number" id="vcode" value="1" min="1"></label>
+      <div class="f">Ícone
+        <div class="icon-box">
+          <div class="icon-prev" id="iconPrev">P</div>
+          <label class="btn" style="cursor:pointer">Escolher imagem<input type="file" id="iconFile" accept="image/*" hidden></label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><i>3</i>Aparência</h2>
+    <p class="sub">Barras do sistema e orientação.</p>
+    <div class="grid">
+      <div class="f full">Barra de status (topo)<div id="segStatus"></div></div>
+      <div class="f full">Barra de navegação (botões de baixo)<div id="segNav"></div>
+        <div class="hint">Transparente: o app aparece por trás da barra. Invisível: tela cheia (deslize na borda para mostrar a barra por um instante).</div></div>
+      <label class="f">Cor das barras<small>Usada no modo Normal.</small><input type="color" id="color" value="#000000"></label>
+      <div class="f">Ícones das barras<div id="segIcons"></div></div>
+      <label class="f full">Orientação
+        <select id="orient"><option value="unspecified">Automática</option><option value="portrait">Somente retrato</option><option value="landscape">Somente paisagem</option></select>
+      </label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><i>4</i>Comportamento</h2>
+    <p class="sub">Como o app se porta no dia a dia.</p>
+    <div class="list" id="behList"></div>
+    <label class="f" style="margin-top:12px">Atualizar a página automaticamente a cada (segundos)<small>0 = desligado.</small><input type="number" id="auto" value="0" min="0" max="86400"></label>
+  </section>
+
+  <section class="card">
+    <h2><i>5</i>Segurança</h2>
+    <p class="sub">Proteja o acesso ao app.</p>
+    <div class="list">
+      <label class="row"><span><b>Exigir biometria ao abrir</b><small>Digital ou rosto; se o aparelho não tiver biometria, aceita o PIN/padrão de tela.</small></span><input type="checkbox" class="sw" id="bio"></label>
+      <label class="row"><span><b>Pedir de novo ao voltar do segundo plano</b><small>Bloqueia o app sempre que você sai e volta.</small></span><input type="checkbox" class="sw" id="relock" disabled></label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><i>6</i>Permissões</h2>
+    <p class="sub">O app pede ao usuário quando for aberto pela primeira vez.</p>
+    <div class="list" id="permList"></div>
+  </section>
+
+  <section class="card" id="result"></section>
+</main>
+
+<div class="dock"><div class="wrap"><button class="btn primary" id="gen">Gerar APK</button></div></div>
+<footer>peeApk • criado por Lipee</footer>
+
+<div class="modal" id="modal"><div class="phone"><iframe id="frame" sandbox="allow-scripts allow-forms allow-modals allow-popups"></iframe><button class="btn" id="closePrev">Fechar</button></div></div>
+<div id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const state = { html: null, htmlName: '', extras: [], iconImg: null, pkgTouched: false, lastBlob: null, lastName: '' };
+
+/* ---------- UI helpers ---------- */
+function seg(name, opts, def){
+  return '<div class="seg">' + opts.map(([v,l]) => '<label><input type="radio" name="'+name+'" value="'+v+'"'+(v===def?' checked':'')+'><span>'+l+'</span></label>').join('') + '</div>';
+}
+function sw(id,t,d,on){
+  return '<label class="row"><span><b>'+t+'</b><small>'+d+'</small></span><input type="checkbox" class="sw" id="'+id+'"'+(on?' checked':'')+'></label>';
+}
+const BEH = [
+  ['pull','Puxar para atualizar','Deslize para baixo no topo da página para recarregar. Pode conflitar com páginas que têm rolagem interna.',true],
+  ['resume','Atualizar ao voltar para o app','Recarrega a página quando você volta do segundo plano.',false],
+  ['back','Botão voltar navega no histórico','Se desligado, o botão voltar fecha o app.',true],
+  ['external','Abrir links externos no navegador','Links http(s) de outros sites abrem no navegador do celular.',true],
+  ['downloads','Permitir downloads','Arquivos de links http(s) vão para a pasta Downloads.',true],
+  ['zoom','Permitir zoom com pinça','',false],
+  ['keepOn','Manter a tela ligada','Impede a tela de apagar enquanto o app está aberto.',false],
+  ['secure','Bloquear capturas de tela','Também esconde o app na tela de apps recentes.',false],
+  ['viewport','Ajustar a página para celular','Adiciona meta viewport e charset UTF-8 se o HTML não tiver.',true]
+];
+const PERMS = [
+  ['network','Estado da rede','Saber se há conexão com a internet.',true],
+  ['camera','Câmera','Fotos e vídeo (getUserMedia e campos de arquivo).',false],
+  ['mic','Microfone','Gravar áudio e chamadas de voz.',false],
+  ['location','Localização (GPS)','navigator.geolocation.',false],
+  ['storage','Arquivos e mídia','Ler fotos, vídeos e áudios do aparelho.',false],
+  ['vibrate','Vibração','navigator.vibrate().',true]
+];
+$('#segStatus').innerHTML = seg('status',[['normal','Normal'],['transparent','Transparente'],['hidden','Invisível']],'normal');
+$('#segNav').innerHTML = seg('nav',[['normal','Normal'],['transparent','Transparente'],['hidden','Invisível']],'normal');
+$('#segIcons').innerHTML = seg('icons',[['light','Claros'],['dark','Escuros']],'light');
+$('#behList').innerHTML = BEH.map(x => sw(...x)).join('');
+$('#permList').innerHTML =
+  '<label class="row"><span><b>Internet</b><small>Sempre ativa (necessária).</small></span><input type="checkbox" class="sw" checked disabled></label>' +
+  PERMS.map(x => sw(...x)).join('');
+
+$('#bio').onchange = e => { $('#relock').disabled = !e.target.checked; $('#relock').checked = e.target.checked; };
+
+let toastT;
+function toast(m){ const t=$('#toast'); t.textContent=m; t.style.display='block'; clearTimeout(toastT); toastT=setTimeout(()=>t.style.display='none',4200); }
+const fmt = n => n < 1024 ? n+' B' : n < 1048576 ? (n/1024).toFixed(1)+' KB' : (n/1048576).toFixed(1)+' MB';
+const slug = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- arquivos ---------- */
+async function setHtml(file){
+  state.html = new Uint8Array(await file.arrayBuffer());
+  state.htmlName = file.name;
+  $('#htmlChip').innerHTML = '<div class="chip"><span>📄 '+esc(file.name)+'</span><em>'+fmt(file.size)+'</em><button id="rmHtml" title="Remover">×</button></div>';
+  $('#rmHtml').onclick = () => { state.html=null; $('#htmlChip').innerHTML=''; $('#prev').disabled=true; $('#htmlFile').value=''; };
+  $('#prev').disabled = false;
+  if (!$('#name').value.trim()) { $('#name').value = file.name.replace(/\.html?$/i,'').replace(/[-_]+/g,' ').replace(/^./, c=>c.toUpperCase()).slice(0,40); $('#name').dispatchEvent(new Event('input')); }
+}
+function renderExtras(){
+  $('#extraList').innerHTML = state.extras.map((f,i) => '<div class="chip"><span>📎 '+esc(f.name)+'</span><em>'+fmt(f.size)+'</em><button data-i="'+i+'" title="Remover">×</button></div>').join('');
+}
+$('#extraList').onclick = e => { const i = e.target.dataset.i; if (i !== undefined) { state.extras.splice(+i,1); renderExtras(); } };
+function addExtras(files){
+  for (const f of files) if (!state.extras.some(x => x.name === f.name)) state.extras.push(f);
+  renderExtras();
+}
+$('#htmlFile').onchange = e => { if (e.target.files[0]) setHtml(e.target.files[0]); };
+$('#extraFile').onchange = e => { addExtras([...e.target.files]); e.target.value=''; };
+const drop = $('#drop');
+['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', e => {
+  const files = [...e.dataTransfer.files];
+  const h = files.find(f => /\.html?$/i.test(f.name));
+  if (h) { setHtml(h); addExtras(files.filter(f => f !== h)); } else toast('Solte um arquivo .html');
+});
+
+/* preview */
+$('#prev').onclick = () => { $('#frame').srcdoc = new TextDecoder().decode(state.html); $('#modal').classList.add('on'); };
+$('#closePrev').onclick = () => { $('#modal').classList.remove('on'); $('#frame').srcdoc = ''; };
+
+/* ícone */
+$('#iconFile').onchange = e => {
+  const f = e.target.files[0]; if (!f) return;
+  const url = URL.createObjectURL(f), img = new Image();
+  img.onload = () => { state.iconImg = img; $('#iconPrev').innerHTML = '<img src="'+url+'" alt="">'; };
+  img.onerror = () => toast('Não consegui ler essa imagem.');
+  img.src = url;
+};
+
+/* nome → pacote */
+$('#name').addEventListener('input', () => {
+  if (state.pkgTouched) return;
+  let s = slug($('#name').value) || 'meuapp'; if (/^\d/.test(s)) s = 'app' + s;
+  $('#pkg').value = 'com.lipee.' + s;
+});
+$('#pkg').addEventListener('input', () => { state.pkgTouched = true; });
+
+/* ---------- validação ---------- */
+const RESERVED = new Set('abstract assert boolean break byte case catch char class const continue default do double else enum extends final finally float for goto if implements import instanceof int interface long native new package private protected public return short static strictfp super switch synchronized this throw throws transient try void volatile while true false null'.split(' '));
+const validPkg = p => /^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$/.test(p) && !p.split('.').some(s => RESERVED.has(s));
+const radio = n => document.querySelector('input[name='+n+']:checked').value;
+
+function collect(){
+  const beh = {}, perms = {};
+  BEH.forEach(x => beh[x[0]] = $('#'+x[0]).checked);
+  PERMS.forEach(x => perms[x[0]] = $('#'+x[0]).checked);
+  let auto = parseInt($('#auto').value) || 0;
+  if (auto > 0 && auto < 5) auto = 5;
+  return {
+    name: $('#name').value.trim(), pkg: $('#pkg').value.trim(), vname: $('#vname').value.trim(), vcode: parseInt($('#vcode').value),
+    status: radio('status'), nav: radio('nav'), icons: radio('icons'), color: $('#color').value, orient: $('#orient').value,
+    beh, perms, auto: Math.min(auto, 86400), bio: $('#bio').checked, relock: $('#bio').checked && $('#relock').checked
+  };
+}
+function validate(o){
+  if (!state.html) return 'Escolha o arquivo HTML primeiro.';
+  if (!o.name) return 'Digite o nome do app.';
+  if (!validPkg(o.pkg)) return 'Pacote inválido. Exemplo: com.lipee.meuapp (minúsculas, sem espaços, sem palavras reservadas do Java).';
+  if (!/^[0-9A-Za-z._+-]+$/.test(o.vname)) return 'Versão inválida. Exemplo: 1.0.0';
+  if (!(o.vcode >= 1) || o.vcode > 2100000000) return 'O código da versão precisa ser um número inteiro maior que 0.';
+  return null;
+}
+
+/* ---------- geração dos arquivos Android ---------- */
+const b = v => v ? 'true' : 'false';
+const xmlEsc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'\\"').replace(/'/g,"\\'").replace(/^([@?])/,'\\$1');
+
+const JAVA_TPL = `package %%PKG%%;
+
+import android.Manifest;
+import android.app.DownloadManager;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.webkit.CookieManager;
+import android.webkit.GeolocationPermissions;
+import android.webkit.PermissionRequest;
+import android.webkit.URLUtil;
+import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.webkit.WebViewAssetLoader;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/* Gerado pelo peeApk (por Lipee). */
+public class MainActivity extends AppCompatActivity {
+
+    // ---- Configuracao escolhida no peeApk ----
+    private static final String APP_NAME = %%APPNAME%%;
+    private static final String START_URL = "https://appassets.androidplatform.net/assets/www/index.html";
+    private static final String STATUS_MODE = "%%STATUS%%";
+    private static final String NAV_MODE = "%%NAV%%";
+    private static final int BAR_COLOR = Color.parseColor("%%BARCOLOR%%");
+    private static final boolean LIGHT_ICONS = %%LIGHT%%;
+    private static final boolean PULL_REFRESH = %%PULL%%;
+    private static final int AUTO_REFRESH_SECONDS = %%AUTO%%;
+    private static final boolean REFRESH_ON_RESUME = %%RESUME%%;
+    private static final boolean KEEP_SCREEN_ON = %%KEEPON%%;
+    private static final boolean BLOCK_SCREENSHOTS = %%SECURE%%;
+    private static final boolean BACK_NAVIGATES = %%BACK%%;
+    private static final boolean ALLOW_ZOOM = %%ZOOM%%;
+    private static final boolean OPEN_EXTERNAL = %%EXTERNAL%%;
+    private static final boolean ALLOW_DOWNLOADS = %%DOWNLOADS%%;
+    private static final boolean BIOMETRIC_LOCK = %%BIO%%;
+    private static final boolean BIOMETRIC_RELOCK = %%RELOCK%%;
+    private static final boolean PERM_CAMERA = %%CAM%%;
+    private static final boolean PERM_MIC = %%MIC%%;
+    private static final boolean PERM_LOCATION = %%LOC%%;
+    private static final boolean PERM_STORAGE = %%STORAGE%%;
+
+    private WebView webView;
+    private SwipeRefreshLayout swipe;
+    private View lockView;
+    private ValueCallback<Uri[]> filePathCallback;
+    private ActivityResultLauncher<Intent> fileLauncher;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+
+    private boolean needAuth = false;
+    private boolean authenticating = false;
+    private boolean loaded = false;
+    private boolean externalFlow = false;
+    private boolean wasBackgrounded = false;
+
+    private final Runnable autoRefreshTask = new Runnable() {
+        @Override public void run() {
+            if (!needAuth && webView != null) webView.reload();
+            handler.postDelayed(this, AUTO_REFRESH_SECONDS * 1000L);
+        }
+    };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (BLOCK_SCREENSHOTS) getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        if (KEEP_SCREEN_ON) getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        fileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            externalFlow = false;
+            if (filePathCallback != null) {
+                filePathCallback.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(result.getResultCode(), result.getData()));
+                filePathCallback = null;
+            }
+        });
+
+        buildUi();
+        setupSystemBars();
+        setupBackHandler();
+
+        needAuth = BIOMETRIC_LOCK;
+        if (!BIOMETRIC_LOCK) startPage();
+    }
+
+    // ---- Interface ----
+    private int dp(int v) { return (int) (v * getResources().getDisplayMetrics().density); }
+
+    private void buildUi() {
+        FrameLayout root = new FrameLayout(this);
+        root.setBackgroundColor(BAR_COLOR);
+
+        webView = new WebView(this);
+        configureWebView();
+
+        if (PULL_REFRESH) {
+            swipe = new SwipeRefreshLayout(this);
+            swipe.addView(webView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            swipe.setOnRefreshListener(() -> webView.reload());
+            root.addView(swipe, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        } else {
+            root.addView(webView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        }
+
+        lockView = buildLockView();
+        lockView.setVisibility(View.GONE);
+        root.addView(lockView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+        setContentView(root);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            Insets ime = insets.getInsets(WindowInsetsCompat.Type.ime());
+            int top = "normal".equals(STATUS_MODE) ? bars.top : 0;
+            int bottom = "normal".equals(NAV_MODE) ? bars.bottom : 0;
+            bottom = Math.max(bottom, ime.bottom);
+            v.setPadding(bars.left, top, bars.right, bottom);
+            return insets;
+        });
+    }
+
+    private View buildLockView() {
+        LinearLayout box = new LinearLayout(this);
+        box.setOrientation(LinearLayout.VERTICAL);
+        box.setGravity(Gravity.CENTER);
+        box.setBackgroundColor(Color.parseColor("#111111"));
+        box.setClickable(true);
+        box.setPadding(dp(24), dp(24), dp(24), dp(24));
+
+        TextView title = new TextView(this);
+        title.setText(APP_NAME);
+        title.setTextColor(Color.WHITE);
+        title.setTextSize(24);
+        title.setGravity(Gravity.CENTER);
+
+        TextView sub = new TextView(this);
+        sub.setText("Aplicativo bloqueado");
+        sub.setTextColor(Color.parseColor("#AAAAAA"));
+        sub.setGravity(Gravity.CENTER);
+        sub.setPadding(0, dp(6), 0, dp(24));
+
+        Button unlock = new Button(this);
+        unlock.setText("Desbloquear");
+        unlock.setOnClickListener(v -> authenticate());
+
+        box.addView(title);
+        box.addView(sub);
+        box.addView(unlock);
+        return box;
+    }
+
+    private void setupSystemBars() {
+        Window w = getWindow();
+        WindowCompat.setDecorFitsSystemWindows(w, false);
+        w.setStatusBarColor("normal".equals(STATUS_MODE) ? BAR_COLOR : Color.TRANSPARENT);
+        w.setNavigationBarColor("normal".equals(NAV_MODE) ? BAR_COLOR : Color.TRANSPARENT);
+        if (Build.VERSION.SDK_INT >= 29) w.setNavigationBarContrastEnforced(false);
+        if (Build.VERSION.SDK_INT >= 28 && !"normal".equals(STATUS_MODE)) {
+            WindowManager.LayoutParams lp = w.getAttributes();
+            lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+            w.setAttributes(lp);
+        }
+        WindowInsetsControllerCompat c = WindowCompat.getInsetsController(w, w.getDecorView());
+        c.setAppearanceLightStatusBars(!LIGHT_ICONS);
+        c.setAppearanceLightNavigationBars(!LIGHT_ICONS);
+        c.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+        hideBars();
+    }
+
+    private void hideBars() {
+        Window w = getWindow();
+        WindowInsetsControllerCompat c = WindowCompat.getInsetsController(w, w.getDecorView());
+        if ("hidden".equals(STATUS_MODE)) c.hide(WindowInsetsCompat.Type.statusBars());
+        if ("hidden".equals(NAV_MODE)) c.hide(WindowInsetsCompat.Type.navigationBars());
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) hideBars();
+    }
+
+    // ---- WebView ----
+    private void configureWebView() {
+        WebSettings s = webView.getSettings();
+        s.setJavaScriptEnabled(true);
+        s.setDomStorageEnabled(true);
+        s.setDatabaseEnabled(true);
+        s.setAllowFileAccess(false);
+        s.setAllowContentAccess(true);
+        s.setMediaPlaybackRequiresUserGesture(false);
+        s.setUseWideViewPort(true);
+        s.setLoadWithOverviewMode(true);
+        s.setSupportZoom(ALLOW_ZOOM);
+        s.setBuiltInZoomControls(ALLOW_ZOOM);
+        s.setDisplayZoomControls(false);
+        s.setGeolocationEnabled(PERM_LOCATION);
+        s.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
+
+        CookieManager.getInstance().setAcceptCookie(true);
+        CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
+
+        final WebViewAssetLoader loader = new WebViewAssetLoader.Builder()
+                .addPathHandler("/assets/", new WebViewAssetLoader.AssetsPathHandler(this))
+                .build();
+
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+                return loader.shouldInterceptRequest(request.getUrl());
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                return handleUrl(request.getUrl());
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                if (swipe != null) swipe.setRefreshing(false);
+            }
+        });
+
+        webView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onPermissionRequest(final PermissionRequest request) {
+                runOnUiThread(() -> {
+                    List<String> ok = new ArrayList<>();
+                    for (String r : request.getResources()) {
+                        if (PermissionRequest.RESOURCE_VIDEO_CAPTURE.equals(r) && PERM_CAMERA) ok.add(r);
+                        else if (PermissionRequest.RESOURCE_AUDIO_CAPTURE.equals(r) && PERM_MIC) ok.add(r);
+                    }
+                    if (ok.isEmpty()) request.deny();
+                    else request.grant(ok.toArray(new String[0]));
+                });
+            }
+
+            @Override
+            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+                callback.invoke(origin, PERM_LOCATION, false);
+            }
+
+            @Override
+            public boolean onShowFileChooser(WebView view, ValueCallback<Uri[]> callback, FileChooserParams params) {
+                if (filePathCallback != null) filePathCallback.onReceiveValue(null);
+                filePathCallback = callback;
+                try {
+                    externalFlow = true;
+                    fileLauncher.launch(params.createIntent());
+                } catch (Exception e) {
+                    externalFlow = false;
+                    filePathCallback = null;
+                    return false;
+                }
+                return true;
+            }
+        });
+
+        webView.setDownloadListener((url, userAgent, contentDisposition, mimeType, contentLength) -> {
+            if (!ALLOW_DOWNLOADS || !URLUtil.isNetworkUrl(url)) {
+                Toast.makeText(this, "Download não suportado neste app.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            try {
+                DownloadManager.Request req = new DownloadManager.Request(Uri.parse(url));
+                req.setMimeType(mimeType);
+                req.addRequestHeader("User-Agent", userAgent);
+                String cookie = CookieManager.getInstance().getCookie(url);
+                if (cookie != null) req.addRequestHeader("Cookie", cookie);
+                req.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                req.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(url, contentDisposition, mimeType));
+                ((DownloadManager) getSystemService(DOWNLOAD_SERVICE)).enqueue(req);
+                Toast.makeText(this, "Baixando arquivo...", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Toast.makeText(this, "Não foi possível baixar o arquivo.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private boolean handleUrl(Uri uri) {
+        String scheme = uri.getScheme();
+        if (scheme == null || "blob".equals(scheme) || "data".equals(scheme) || "about".equals(scheme) || "javascript".equals(scheme)) return false;
+        if ("appassets.androidplatform.net".equals(uri.getHost())) return false;
+        boolean web = "http".equals(scheme) || "https".equals(scheme);
+        if (web && !OPEN_EXTERNAL) return false;
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
+        } catch (Exception e) {
+            Toast.makeText(this, "Nenhum app para abrir este link.", Toast.LENGTH_SHORT).show();
+        }
+        return true;
+    }
+
+    // ---- Inicio, permissoes e biometria ----
+    private void startPage() {
+        requestRuntimePermissions();
+        if (!loaded) {
+            loaded = true;
+            webView.loadUrl(START_URL);
+        }
+    }
+
+    private void requestRuntimePermissions() {
+        List<String> list = new ArrayList<>();
+        if (PERM_CAMERA) list.add(Manifest.permission.CAMERA);
+        if (PERM_MIC) list.add(Manifest.permission.RECORD_AUDIO);
+        if (PERM_LOCATION) {
+            list.add(Manifest.permission.ACCESS_FINE_LOCATION);
+            list.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        }
+        if (PERM_STORAGE) {
+            if (Build.VERSION.SDK_INT >= 33) {
+                list.add("android.permission.READ_MEDIA_IMAGES");
+                list.add("android.permission.READ_MEDIA_VIDEO");
+                list.add("android.permission.READ_MEDIA_AUDIO");
+            } else {
+                list.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+        }
+        if ((PERM_STORAGE || ALLOW_DOWNLOADS) && Build.VERSION.SDK_INT <= 28) {
+            list.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        List<String> missing = new ArrayList<>();
+        for (String p : list) {
+            if (ContextCompat.checkSelfPermission(this, p) != PackageManager.PERMISSION_GRANTED) missing.add(p);
+        }
+        if (!missing.isEmpty()) ActivityCompat.requestPermissions(this, missing.toArray(new String[0]), 100);
+    }
+
+    private void authenticate() {
+        if (authenticating) return;
+        int auth = BiometricManager.Authenticators.BIOMETRIC_WEAK | BiometricManager.Authenticators.DEVICE_CREDENTIAL;
+        int can = BiometricManager.from(this).canAuthenticate(auth);
+        if (can != BiometricManager.BIOMETRIC_SUCCESS) {
+            // Aparelho sem biometria nem bloqueio de tela: nao ha como autenticar, entao libera.
+            Toast.makeText(this, "Este aparelho não tem biometria ou bloqueio de tela configurado.", Toast.LENGTH_LONG).show();
+            unlock();
+            return;
+        }
+        authenticating = true;
+        BiometricPrompt prompt = new BiometricPrompt(this, ContextCompat.getMainExecutor(this),
+                new BiometricPrompt.AuthenticationCallback() {
+                    @Override
+                    public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) {
+                        authenticating = false;
+                        unlock();
+                    }
+
+                    @Override
+                    public void onAuthenticationError(int errorCode, CharSequence errString) {
+                        authenticating = false;
+                        lockView.setVisibility(View.VISIBLE);
+                    }
+                });
+        BiometricPrompt.PromptInfo info = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle(APP_NAME)
+                .setSubtitle("Confirme sua identidade para abrir")
+                .setAllowedAuthenticators(auth)
+                .build();
+        prompt.authenticate(info);
+    }
+
+    private void unlock() {
+        needAuth = false;
+        lockView.setVisibility(View.GONE);
+        startPage();
+    }
+
+    // ---- Ciclo de vida ----
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (AUTO_REFRESH_SECONDS > 0) {
+            handler.removeCallbacks(autoRefreshTask);
+            handler.postDelayed(autoRefreshTask, AUTO_REFRESH_SECONDS * 1000L);
+        }
+        if (wasBackgrounded) {
+            wasBackgrounded = false;
+            if (REFRESH_ON_RESUME && loaded) webView.reload();
+        }
+        if (needAuth) {
+            lockView.setVisibility(View.VISIBLE);
+            authenticate();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        lockView.setVisibility(needAuth ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    protected void onPause() {
+        if (BIOMETRIC_LOCK && BIOMETRIC_RELOCK) lockView.setVisibility(View.VISIBLE);
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        handler.removeCallbacks(autoRefreshTask);
+        if (externalFlow) {
+            externalFlow = false;
+            return;
+        }
+        wasBackgrounded = true;
+        if (BIOMETRIC_LOCK && BIOMETRIC_RELOCK) needAuth = true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        handler.removeCallbacks(autoRefreshTask);
+        if (webView != null) webView.destroy();
+        super.onDestroy();
+    }
+
+    private void setupBackHandler() {
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (lockView.getVisibility() == View.VISIBLE) { finish(); return; }
+                if (BACK_NAVIGATES && webView.canGoBack()) webView.goBack();
+                else finish();
+            }
+        });
+    }
+}
+`;
+
+function javaSrc(o){
+  const storage = o.perms.storage;
+  const map = {
+    '%%PKG%%': o.pkg, '%%APPNAME%%': JSON.stringify(o.name), '%%STATUS%%': o.status, '%%NAV%%': o.nav, '%%BARCOLOR%%': o.color,
+    '%%LIGHT%%': b(o.icons === 'light'), '%%PULL%%': b(o.beh.pull), '%%AUTO%%': String(o.auto), '%%RESUME%%': b(o.beh.resume),
+    '%%KEEPON%%': b(o.beh.keepOn), '%%SECURE%%': b(o.beh.secure), '%%BACK%%': b(o.beh.back), '%%ZOOM%%': b(o.beh.zoom),
+    '%%EXTERNAL%%': b(o.beh.external), '%%DOWNLOADS%%': b(o.beh.downloads), '%%BIO%%': b(o.bio), '%%RELOCK%%': b(o.relock),
+    '%%CAM%%': b(o.perms.camera), '%%MIC%%': b(o.perms.mic), '%%LOC%%': b(o.perms.location), '%%STORAGE%%': b(storage)
+  };
+  let s = JAVA_TPL;
+  for (const k in map) s = s.split(k).join(map[k]);
+  return s;
+}
+
+function manifestXml(o){
+  const lines = [];
+  const add = (n, max) => lines.push('    <uses-permission android:name="android.permission.' + n + '"' + (max ? ' android:maxSdkVersion="' + max + '"' : '') + ' />');
+  add('INTERNET');
+  if (o.perms.network) add('ACCESS_NETWORK_STATE');
+  if (o.perms.camera) add('CAMERA');
+  if (o.perms.mic) { add('RECORD_AUDIO'); add('MODIFY_AUDIO_SETTINGS'); }
+  if (o.perms.location) { add('ACCESS_FINE_LOCATION'); add('ACCESS_COARSE_LOCATION'); }
+  if (o.perms.storage) { add('READ_EXTERNAL_STORAGE', 32); add('READ_MEDIA_IMAGES'); add('READ_MEDIA_VIDEO'); add('READ_MEDIA_AUDIO'); }
+  if (o.perms.storage || o.beh.downloads) add('WRITE_EXTERNAL_STORAGE', 28);
+  if (o.perms.vibrate) add('VIBRATE');
+  if (o.bio) add('USE_BIOMETRIC');
+  const feats = [];
+  if (o.perms.camera) feats.push('    <uses-feature android:name="android.hardware.camera" android:required="false" />');
+  if (o.perms.mic) feats.push('    <uses-feature android:name="android.hardware.microphone" android:required="false" />');
+  if (o.perms.location) feats.push('    <uses-feature android:name="android.hardware.location" android:required="false" />');
+  return `<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+${lines.join('\n')}
+${feats.join('\n')}
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
+        android:hardwareAccelerated="true"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="${o.orient}"
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboard|keyboardHidden|uiMode|density">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
+`;
+}
+
+function readme(o, slugName){
+  return [
+    'peeApk - projeto Android do app "' + o.name + '" (criado por Lipee)',
+    '=====================================================================',
+    '',
+    'Pacote: ' + o.pkg + '   |   Versao: ' + o.vname + ' (codigo ' + o.vcode + ')',
+    '',
+    'COMO GERAR O .APK',
+    '',
+    'Opcao A - GitHub (gratis, sem instalar nada):',
+    '  1. Crie um repositorio novo no GitHub.',
+    '  2. Envie TODOS os arquivos deste projeto para ele, inclusive a pasta ".github".',
+    '  3. Abra a aba "Actions" -> "Build APK". Se nao iniciar sozinho, clique em "Run workflow".',
+    '  4. Quando terminar (3 a 5 minutos), abra a execucao e baixe o arquivo em "Artifacts".',
+    '  5. Extraia o ZIP baixado e instale o .apk no celular (permita instalar de fontes desconhecidas).',
+    '',
+    'Opcao B - Android Studio:',
+    '  1. File -> Open e escolha esta pasta.',
+    '  2. Build -> Build Bundle(s) / APK(s) -> Build APK(s).',
+    '',
+    'Opcao C - Terminal (JDK 17, Android SDK e Gradle 8.7 instalados):',
+    '  gradle assembleRelease',
+    '  O arquivo fica em app/build/outputs/apk/release/',
+    '',
+    'ONDE ESTA O SEU SITE',
+    '  app/src/main/assets/www/index.html (e os arquivos extras na mesma pasta).',
+    '  Para atualizar o conteudo, troque esses arquivos e gere o APK de novo.',
+    '',
+    'OBSERVACOES',
+    '  - O APK sai assinado com a chave de debug: instala normalmente no celular.',
+    '    Para publicar na Play Store e necessario assinar com a sua propria chave (keystore).',
+    '  - Se a biometria estiver ligada e o aparelho nao tiver biometria nem bloqueio de tela, o app abre normalmente.',
+    '  - Downloads funcionam para links http(s); arquivos gerados na pagina (blob:) nao sao suportados.',
+    ''
+  ].join('\n');
+}
+
+/* ícone */
+function drawDefaultIcon(letter){
+  const c = document.createElement('canvas'); c.width = c.height = 512;
+  const x = c.getContext('2d');
+  x.fillStyle = '#111'; x.fillRect(0,0,512,512);
+  x.fillStyle = '#fff'; x.font = '800 300px system-ui, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
+  x.fillText(letter, 256, 280);
+  return c;
+}
+function pngBlob(src, size, round){
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const x = c.getContext('2d');
+  if (round) { x.beginPath(); x.arc(size/2, size/2, size/2, 0, Math.PI*2); x.clip(); }
+  const w0 = src.naturalWidth || src.width, h0 = src.naturalHeight || src.height;
+  const k = Math.max(size / w0, size / h0), w = w0 * k, h = h0 * k;
+  x.drawImage(src, (size - w) / 2, (size - h) / 2, w, h);
+  return new Promise(res => c.toBlob(res, 'image/png'));
+}
+
+/* html: garante charset/viewport */
+function prepareHtml(o){
+  let bytes = state.html;
+  let text;
+  try { text = new TextDecoder('utf-8', { fatal: true }).decode(bytes); } catch (e) { return bytes; }
+  let inj = '';
+  if (!/<meta[^>]+charset/i.test(text)) inj += '<meta charset="utf-8">';
+  if (o.beh.viewport && !/name\s*=\s*["']?viewport/i.test(text)) inj += '<meta name="viewport" content="width=device-width, initial-scale=1">';
+  if (!inj) return bytes;
+  text = /<head[^>]*>/i.test(text) ? text.replace(/<head[^>]*>/i, m => m + inj) : inj + text;
+  return new TextEncoder().encode(text);
+}
+
+async function buildZip(o){
+  if (typeof JSZip === 'undefined') throw new Error('Não consegui carregar a biblioteca JSZip. Verifique a internet e recarregue a página.');
+  const zip = new JSZip();
+  const nameSlug = slug(o.name) || 'app';
+  const javaDir = 'app/src/main/java/' + o.pkg.split('.').join('/');
+
+  zip.file('settings.gradle',
+`pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = 'App'
+include ':app'
+`);
+  zip.file('build.gradle', "plugins {\n    id 'com.android.application' version '8.5.2' apply false\n}\n");
+  zip.file('gradle.properties', 'org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8\nandroid.useAndroidX=true\nandroid.nonTransitiveRClass=true\n');
+  zip.file('.gitignore', '.gradle/\nbuild/\nlocal.properties\n.idea/\n*.iml\n');
+  zip.file('LEIA-ME.txt', readme(o, nameSlug));
+
+  zip.file('.github/workflows/build.yml',
+`name: Build APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.7'
+      - name: Build APK
+        run: gradle assembleRelease --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${nameSlug}-apk
+          path: app/build/outputs/apk/release/*.apk
+`);
+
+  zip.file('app/build.gradle',
+`plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace '${o.pkg}'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId '${o.pkg}'
+        minSdk 24
+        targetSdk 34
+        versionCode ${o.vcode}
+        versionName '${o.vname}'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'androidx.biometric:biometric:1.1.0'
+    implementation 'androidx.webkit:webkit:1.8.0'
+}
+`);
+  zip.file('app/src/main/AndroidManifest.xml', manifestXml(o));
+  zip.file(javaDir + '/MainActivity.java', javaSrc(o));
+  zip.file('app/src/main/res/values/strings.xml', '<resources>\n    <string name="app_name">' + xmlEsc(o.name) + '</string>\n</resources>\n');
+  zip.file('app/src/main/res/values/colors.xml', '<resources>\n    <color name="bar_color">' + o.color + '</color>\n</resources>\n');
+  zip.file('app/src/main/res/values/styles.xml',
+`<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/bar_color</item>
+    </style>
+</resources>
+`);
+
+  // ícones
+  const src = state.iconImg || drawDefaultIcon((o.name[0] || 'P').toUpperCase());
+  const sizes = { mdpi: 48, hdpi: 72, xhdpi: 96, xxhdpi: 144, xxxhdpi: 192 };
+  for (const d in sizes) {
+    zip.file('app/src/main/res/mipmap-' + d + '/ic_launcher.png', await pngBlob(src, sizes[d], false));
+    zip.file('app/src/main/res/mipmap-' + d + '/ic_launcher_round.png', await pngBlob(src, sizes[d], true));
+  }
+
+  // site
+  zip.file('app/src/main/assets/www/index.html', prepareHtml(o));
+  for (const f of state.extras) {
+    const n = f.name.replace(/[\\/]/g, '_');
+    if (n.toLowerCase() === 'index.html') continue;
+    zip.file('app/src/main/assets/www/' + n, f);
+  }
+
+  return { blob: await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' }), file: nameSlug + '-projeto-android.zip' };
+}
+
+function download(blob, name){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+
+function showResult(o){
+  const r = $('#result');
+  r.style.display = 'block';
+  r.innerHTML =
+    '<h2><i>✓</i>Projeto de “' + esc(o.name) + '” pronto</h2>' +
+    '<p class="sub">Falta só um passo para virar o .apk.</p>' +
+    '<ol><li>Extraia o ZIP e envie <b>todos</b> os arquivos (inclusive a pasta <b>.github</b>) para um repositório novo no GitHub.</li>' +
+    '<li>Abra <b>Actions → Build APK</b> e aguarde de 3 a 5 minutos.</li>' +
+    '<li>Baixe o <b>.apk</b> em <b>Artifacts</b> e instale no celular.</li></ol>' +
+    '<p class="hint" style="margin-top:12px">Prefere o Android Studio? Abra a pasta extraída e use Build → Build APK(s). O arquivo LEIA-ME.txt dentro do ZIP tem todos os caminhos.</p>' +
+    '<div class="actions"><button class="btn primary" id="again">Baixar o ZIP novamente</button></div>';
+  $('#again').onclick = () => download(state.lastBlob, state.lastName);
+  r.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+$('#gen').onclick = async () => {
+  const o = collect();
+  const err = validate(o);
+  if (err) return toast(err);
+  const btn = $('#gen'); btn.disabled = true; btn.textContent = 'Gerando…';
+  try {
+    const res = await buildZip(o);
+    state.lastBlob = res.blob; state.lastName = res.file;
+    download(res.blob, res.file);
+    showResult(o);
+  } catch (e) {
+    toast('Erro: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Gerar APK';
+  }
+};
+</script>
+</body>
+</html>

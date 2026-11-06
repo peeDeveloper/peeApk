@@ -1,0 +1,31 @@
+peeApk - projeto Android do app "peeApk" (criado por Lipee)
+=====================================================================
+
+Pacote: com.lipee.peeapk   |   Versao: 1.0.0 (codigo 1)
+
+COMO GERAR O .APK
+
+Opcao A - GitHub (gratis, sem instalar nada):
+  1. Crie um repositorio novo no GitHub.
+  2. Envie TODOS os arquivos deste projeto para ele, inclusive a pasta ".github".
+  3. Abra a aba "Actions" -> "Build APK". Se nao iniciar sozinho, clique em "Run workflow".
+  4. Quando terminar (3 a 5 minutos), abra a execucao e baixe o arquivo em "Artifacts".
+  5. Extraia o ZIP baixado e instale o .apk no celular (permita instalar de fontes desconhecidas).
+
+Opcao B - Android Studio:
+  1. File -> Open e escolha esta pasta.
+  2. Build -> Build Bundle(s) / APK(s) -> Build APK(s).
+
+Opcao C - Terminal (JDK 17, Android SDK e Gradle 8.7 instalados):
+  gradle assembleRelease
+  O arquivo fica em app/build/outputs/apk/release/
+
+ONDE ESTA O SEU SITE
+  app/src/main/assets/www/index.html (e os arquivos extras na mesma pasta).
+  Para atualizar o conteudo, troque esses arquivos e gere o APK de novo.
+
+OBSERVACOES
+  - O APK sai assinado com a chave de debug: instala normalmente no celular.
+    Para publicar na Play Store e necessario assinar com a sua propria chave (keystore).
+  - Se a biometria estiver ligada e o aparelho nao tiver biometria nem bloqueio de tela, o app abre normalmente.
+  - Downloads funcionam para links http(s); arquivos gerados na pagina (blob:) nao sao suportados.
